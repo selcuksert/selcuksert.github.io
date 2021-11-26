@@ -6,6 +6,5 @@
 
 ---
 
-Personal GitHub.io page
-
+Personal GitHub.io page:
 [selcuksert.github.io](https://selcuksert.github.io)

@@ -20,3 +20,47 @@ Reactive systems behave different from computational systems. Programs for compu
 
 Reactive systems propose a resilient and robust architecture for distributed systems as per their design model. That is why they are increasingly taking place in areas where critical tasks are being performed, massive, unpredictable input occurred, and failure is intolerable such as e-commerce, aviation (e.g. air-traffic management systems, electronic control systems), etc.
 
+# Reactive Programming Paradigm
+A reactive program is simply the software that drives a reactive system. Reactive programming models carry out loose coupling of application components via enabling them to react to events around them instead of interacting with their ecosystem using formal request/response or command/query methods. This reduces dependencies between components, which paves the way of modularity in the application architecture via enabling to treat input or events as streams to analyze and process.
+
+This paradigm applies to a number of domains that were seen as different in earlier times but have more commonality in fact such as: communication protocols, hardware and software controllers, real‐time process control, systems and HMI (human–machine interface) drivers, and signal processing. Embedded computing which is a special domain of reactive programming has a massive usage in plants, transportation, house appliances, and become pervasive in daily life. The program quality and safety are very important considerations for  such mission critical fields of business.
+
+Concurrency and determinism are two crucial tenets of reactive programming. As mentioned before reactive programming establishes an architecture with logically coupled but physically decoupled components where concurrency is must. Most of these systems need to be deterministic where they produce same sequence of output for a given sequence of input. IOW, they need to react in same fashion in same environment, a constraint that is clear in most of the aforementioned applications.
+
+Reactive programming is also a type of declarative programming paradigm that aims to build the program structure with defining logic of a computation without describing its control flow (defines “what” to do) in contrast with imperative programming that defines the computation methodology and algorithm systematically in a definitive way (defines “how” to do). Reactive programming leverages functional programming based on lambda calculus that avoids states, side effects and mutation of data via creating expressions instead of statements and evaluate functions. In functional programming, the implemented function always return the same value for the same argument for the sake of “determinism” in reactive systems.
+
+An example of imperative programming style (JavaScript):
+
+```js
+class Number {
+
+  constructor(number = 0) {
+    this.number = number;
+  }
+
+  div(x) {
+
+    if(x == 0) {
+       console.error("Denominator cannot be 0!");
+       return;
+    } 
+
+    this.number = this.number / x;
+  }
+
+}
+
+const myNumber = new Number(5);
+
+myNumber.div(0);
+```
+-> Result: Denominator cannot be 0!
+
+An example of functional programming style (JavaScript):
+```js
+const div = (a, b) => a / b;
+
+div(5, 0);
+```
+-> Result: Infinity
+

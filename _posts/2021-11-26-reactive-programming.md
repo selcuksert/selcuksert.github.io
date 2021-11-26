@@ -140,19 +140,19 @@ Key components that shape ReactiveX are Observable and Observer. An Observable r
 
 The power of functional programming paradigm is used via operators in ReactiveX. An operator is a function that takes one Observable (the source) as its first argument and returns another Observable (the destination). Then for every item that the source observable emits, it will apply a function to that item, and then emit the result on the destination Observable. Operators can be chained together to create complex data flows that filter event based on certain criteria. Multiple operators can be applied to the same Observable. Some of the well-known operators provided by ReactiveX are:
 
-* _Map_: The map operator transforms items emitted by an Observable by applying a function to each item (See Figure 2). Another one related with map operation is flatMap operator that can be used to flatten Observables whenever we end up with nested Observables. As flatMap returns an observable itself, it is perfectly suited to map over asynchronous operations. Here is a marble diagram of flatMap operator:
+* <ins>Map</ins>: The map operator transforms items emitted by an Observable by applying a function to each item (See Figure 2). Another one related with map operation is flatMap operator that can be used to flatten Observables whenever we end up with nested Observables. As flatMap returns an observable itself, it is perfectly suited to map over asynchronous operations. Here is a marble diagram of flatMap operator:
 
   ![flatmap](/images/reactive-programming/flatmap.png)
 
-* _Scan_: The scan operator applies a function to each item emitted by an Observable sequentially and emits each successive value. Here is a marble diagram of scan operator:
+* <ins>Scan</ins>: The scan operator applies a function to each item emitted by an Observable sequentially and emits each successive value. Here is a marble diagram of scan operator:
 
   ![scan](/images/reactive-programming/scan.png)
 
-* _GroupBy_: The groupBy operator allows classifying the events in the input Observable into output categories. Here is a marble diagram of groupBy operator:
+* <ins>GroupBy</ins>: The groupBy operator allows classifying the events in the input Observable into output categories. Here is a marble diagram of groupBy operator:
 
   ![groupby](/images/reactive-programming/groupby.png)
 
-* _Filter_: The operator filter emits only those items from an observable that pass the test defined via a designated predicate (See first marble diagram. Predicate there is x>5).
+* <ins>Filter</ins>: The operator filter emits only those items from an observable that pass the test defined via a designated predicate (See first marble diagram. Predicate there is x>5).
 
 ## Project Reactor
 Project Reactor is Reactive Streams compliant JVM based implementation provided within Spring Framework (as of version 5.0) by Pivotal. It is based on Reactor Core and IO modules that expose Reactive Streams constructs, which provides the ability to use Spring, RxJava, Akka Streams, etc. On a modest hardware configuration, Project Reactor based applications can handle high data throughput. There is also out-of-box support of backpressure ready network engines for protocols HTTP (including WebSockets), TCP, UDP with reactive encoding/decoding ability. To implement Reactive Extensions Project Reactor provides two types of APIs:

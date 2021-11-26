@@ -92,19 +92,19 @@ Reactive Manifesto is an online [declaration](https://www.reactivemanifesto.org/
 * Elastic
 * Message Driven
 
-## Responsive
+### Responsive
 According to the manifesto, a reactive system responds in a timely manner. One of the main challenges of the system design is to detect problems promptly and to handle them effectively for the sake of usability and utility. A responsive system has the ability to respond quickly and consistently with setting reliable upper bounds in order to provide a consistent quality of service (QoS). As responsive systems behave in a consistent manner, the error handling becomes straightforward and it enhances end user confidence with fostering interaction with system. This type of system has several measures to achieve responsiveness such as health-check, failover handling, timeout, retry, circuit breaker.
 
-## Resilient
+### Resilient
 According to the manifesto, a reactive system sustains responsiveness in case of any failure. To accomplish this principle the system should support:
 * <ins>Replication</ins>: Ability to execute a service component in different places such as on different threads, processes server nodes, network domains for the sake of scalability.
 * <ins>Isolation and Containment</ins>: Decoupling producer and consumer ends using asynchronous message-driven communication patterns with sustaining their own service logic and life cycle independently and running in different processes. The state, behavior and errors of these components need to be handled and controlled in these components without sharing or cascading to other ones in order to avoid full system collapse in case of failure.
 * <ins>Delegation</ins>: Ability to hand over the processing responsibility of a task to another component such as error handling and reporting functions.
 
-## Elastic
+### Elastic
 According to the manifesto, a reactive system sustains responsiveness in fluctuating load conditions. It has the ability to scale up or down resources allocated to it according to the input volume been exposed to which means to achieve elasticity using predictive scaling methods.
 
-## Message Driven
+### Message Driven
 According to the manifesto, a reactive system utilizes asynchronous message driven communication in order to achieve loose coupling, isolation and location independence. The failure is dispatched as messages to error handlers, which are responsible for monitoring errors and if required supervising the components in a centralized and standardized mode. Elasticity, load balancing are fulfilled by monitoring these messages. A reactive system uses backpressure methodology where any component that suffers overhead can give feedback to message senders when to reduce input volume in order to avoid collapsing or dropping messages without control for attainment of resiliency and load distribution. The following image is a basic representation of principles and their internal relations of a reactive system:
 
 ![manifesto](/images/reactive-programming/manifesto.png)

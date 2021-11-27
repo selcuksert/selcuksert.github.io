@@ -235,14 +235,14 @@ _There also exists a [sample project](https://github.com/selcuksert/reactive-pro
 # References
 1. D. Harel and A. Pnueli, "On the development of reactive systems" in Logics and Models of concurrent Systems, NATO ASI Series, vol. 13, K. R. Apt, Ed. New York: Springer-Verlag, pp. 477-498, 1985.
 2. Pnueli, "Applications of temporal logic to the specification and verification of reactive systems: A survey of current trends", in Current Trends in Concurrency, de Bakker et al., Eds., Lecture Notes in Comput. Sci., vol. 224, Berlin, Germany: Springer-Verlag, pp. 510- 584, 1986.
-3. A. Benveniste, G. Berry, “The Synchronous Approach to Reactive and Real-Time Systems”, https://www.sciencedirect.com/science/article/pii/B9781558607026500132, 2002
+3. A. Benveniste, G. Berry, [“The Synchronous Approach to Reactive and Real-Time Systems”](https://www.sciencedirect.com/science/article/pii/B9781558607026500132), 2002
 4. K. Pratap, Shelja, M. K. Bedi, “Formal Specification and Verification of Reactive Systems” in International Journal of Application or Innovation in Engineering & Management, 2013
 5. G. Berry, “Reactive Programming” in Encyclopedia of Software Engineering, 2002
-6. J. Bonér, D. Farley, R. Kuhn, M. Thompson, “Reactive Manifesto”, https://www.reactivemanifesto.org, 2013 (first release)
-7. Reactive Streams, http://www.reactive-streams.org
-8. ReactiveX Documentation, http://reactivex.io/documentation
-9. Project Reactor Reference Guide, https://projectreactor.io/docs/core/release/reference
-10. Akka Documentation, https://doc.akka.io/docs/akka/current/typed/guide/introduction.html?language=java
-11. Vert.x Documentation, https://vertx.io/docs/
+6. J. Bonér, D. Farley, R. Kuhn, M. Thompson, [“Reactive Manifesto”](https://www.reactivemanifesto.org), 2013 (first release)
+7. [Reactive Streams](http://www.reactive-streams.org)
+8. [ReactiveX Documentation](http://reactivex.io/documentation)
+9. [Project Reactor Reference Guide](https://projectreactor.io/docs/core/release/reference)
+10. [Akka Documentation](https://doc.akka.io/docs/akka/current/typed/guide/introduction.html?language=java)
+11. [Vert.x Documentation](https://vertx.io/docs/)
 12. C. Escoffier, “Building Reactive Microservices in Java”, O’Reilly, 2017
-13. Spring WebFlux Documentation, https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html#webflux
+13. [Spring WebFlux Documentation](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html#webflux)

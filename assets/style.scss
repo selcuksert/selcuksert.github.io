@@ -255,6 +255,9 @@ p > img {
 
 .wrapper-masthead {
   margin-bottom: 25px;
+  top: 0;
+  position: sticky;
+  position: -webkit-sticky;
 }
 
 .masthead {

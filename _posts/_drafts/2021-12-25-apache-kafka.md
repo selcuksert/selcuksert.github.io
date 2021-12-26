@@ -20,7 +20,7 @@ A business produces data at every stage of its lifetime while:
 - Delivering value and services to its customers
 
 The global data traffic increased 112 times from 2008 to 2020.[^2] To unleash the power of such a massive amount of data, it should be transformed into a more meaningful asset, information, using right combination of application and technology stack while specification, monitoring, execution of business processes. Because:
-> "Every company is a technology company, regardless of what business they think they are in. A bank is just an IT company with a banking license." <br/>-- _Christopher Little_  
+> "Every company is a technology company, regardless of what business they think they are in. A bank is just an IT company with a banking license." <br/>― _Christopher Little_  
 
 This information is then used to gain **knowledge** in a quick and a straightforward way. It is the primary tool for understanding and overcoming business challenges in fast-paced and ever-changing world.
 
@@ -35,7 +35,39 @@ The variety of event sources (sensors on a plane, IoT devices on lorry fleet, cl
 Generally speaking, these types of systems implements no control on the pace of incoming requests and data streams (e.g. ingress buffer for events). There is no focus on the context and content of data and what is being communicated. The last and may be the most prominent drawback is that the communication between client and server is not replayable. IOW, it is difficult to reconstruct or rollback the state in case of any need.
 
 # Apache Kafka
+> You do not need to leave your room. Remain sitting at your table and listen. Do not even listen, simply wait, be quiet, still and solitary. The world will freely offer itself to you to be unmasked.<br/>―  _Franz Kafka_, The Zürau Aphorisms
+
+As one of the prominent writers of 20<sup>th</sup> century, Franz Kafka underlined the importance of listening to understand things happening around with aforementioned quote of him. Although Jay Kreps, co-creator of Apache Kafka, stated[^3] that to name a technology optimized for writing he used the name of a writer whom he likes, the above quote also overlaps with Apache Kafka's function of listening and processing events around.
+
+## History
+Apache Kafka built at LinkedIn in 2008 by Jay Kreps (technical lead of search systems at that time), Neha Narkhade and Jun Rao. The company open sourced the project in 2010 and it joined under Apache Umbrella in 2011. The team left the company in 2014[^4], and founded a new company named Confluent which provides enterprise event streaming solutions (on-premise and SaaS) on top of Apache Kafka technology. It is used by big tech unicorns like Netflix, Spotify and Uber[^5].
+
+There existed two main challenges at LinkedIn that the team was asked to overcome:
+1. Request/transaction monitoring system was faulty and worked with polling model:
+    - Data points had large gaps.
+    - Data model was not consistent.
+    - Maintenance was not straightforward:
+        - Schema changes had been turned out to be outage. 
+        - Too much manual intervention needed.
+2. Web backend servers streamed data to user activity tracking system using HTTP requests:
+    - XML data collected and offloaded to an offline processing system.
+    - No real-time insight was available (data processed in hourly batches).
+    - Data from monitoring and activity tracking system could not be correlated easily:
+        - There exists difference between data models where pull-push method became problematic. 
+
+At first, ActiveMQ which is a popular traditional message broker was selected. Due to the middleware centric nature of this type of brokers while dispatching messages, it could not handle the data traffic that LinkedIn search engine encounters with. The flaws in that technology also caused broker instances grind to halt under heavy load.
+
+After these bad experiences with ActiveMQ, they decided to implement a fit-for-purpose solution for LinkedIn. The technology needs to:
+- Decouple data generators and users by using push-pull model
+- Provide persistence for message data on messaging middleware with the ability to present data to multiple users
+- Handle high data volume/throughput
+- Scale up horizontally in case of need in proportion with data stream volume
+
+## What Apache Kafka aims to resolve
 
 
 [^1]: https://kafka.apache.org/intro#intro_platform
 [^2]: https://www.foreignaffairs.com/articles/united-states/2021-04-16/data-power-new-rules-digital-age
+[^3]: https://www.quora.com/What-is-the-relation-between-Kafka-the-writer-and-Apache-Kafka-the-distributed-messaging-system/answer/Jay-Kreps
+[^4]: https://www.forbes.com/sites/stevenli1/2020/05/11/confluent-jay-kreps-kafka-4-billion-2020
+[^5]: https://stackshare.io/kafka

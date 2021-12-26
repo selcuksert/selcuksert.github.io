@@ -106,6 +106,10 @@ hash(group_id) % (partition # of internal offset topic)
 ```
 This calculation balances the load of consumer group management across cluster equally, so that the number of groups can be scaled up via increasing number of brokers. The internal offsets topic `__consumer_offsets`, is used to store committed offsets. When a consumer starts up it finds the coordinator and requests joining that group. Each member must send heartbeats to the coordinator. In case of timeout coordinator kicks off the consumer from group and re-assigns its partitions to another member in group.
 
+Using consumer groups enables read parallelization and high workload handling. To reap the benefits of it the number of consumers in a group should be equal to number of partitions in subscribed topic. A group with fewer members is also acceptable but it may overload some consumers as they can process messages from multiple partitions at a time. A group with more members than number of partitions is also acceptable, but some members will be idle during processing which is wasting of valuable resources. Different groups can be designated to consume data from same topic for different use cases. Consumers on a powerful platform/hardware stack can be grouped together to perform resource intensive streaming operations, like data science math. Another group with moderate consumers can be used for reporting that can be done within a flexible time frame like overnight batches.
+
+{% include image.html url="/images/apache-kafka/consumer_groups.png" caption="Consumer groups" %}
+
 [^1]: https://kafka.apache.org/intro#intro_platform
 [^2]: https://www.foreignaffairs.com/articles/united-states/2021-04-16/data-power-new-rules-digital-age
 [^3]: https://www.quora.com/What-is-the-relation-between-Kafka-the-writer-and-Apache-Kafka-the-distributed-messaging-system/answer/Jay-Kreps

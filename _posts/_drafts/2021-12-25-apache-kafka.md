@@ -64,10 +64,18 @@ After these bad experiences with ActiveMQ, they decided to implement a fit-for-p
 - Scale up horizontally in case of need in proportion with data stream volume
 
 ## What Apache Kafka aims to resolve
+Kafka is a distributed system of servers and clients that communicate using a performant TCP-based binary network protocol[^6] in an asynchronous manner. It can be installed on bare-metal servers, virtual machines, and containers in on-premise corporate data centers as well as on public and private cloud based platforms. It simply collects and stores data in a distributed commit log which is an ordered sequence of events/facts with the time of happening. This is in fact the state of a system or domain under observation at a specific time or time frame.
 
+With that model Kafka, as a centralized communication hub (nervous system), simplifies communication and message interchange between systems. Systems can send and receive data with no need to know each other. It also embraces the famous publish-subscribe integration pattern[^7] to publish (write) to and subscribe (read) to streams of events with continuously importing/exporting data from other systems.
 
+Kafka has the ability to streams of events durably and reliably as long as it is needed (with the boundary of storage limits) on distributed commit log that it manages. With that event store it is also possible to process streams of events as they occur or retrospectively. Kafka brings distributed, highly scalable, elastic, fault-tolerant, and secure deployment model.
+
+  
+ 
 [^1]: https://kafka.apache.org/intro#intro_platform
 [^2]: https://www.foreignaffairs.com/articles/united-states/2021-04-16/data-power-new-rules-digital-age
 [^3]: https://www.quora.com/What-is-the-relation-between-Kafka-the-writer-and-Apache-Kafka-the-distributed-messaging-system/answer/Jay-Kreps
 [^4]: https://www.forbes.com/sites/stevenli1/2020/05/11/confluent-jay-kreps-kafka-4-billion-2020
 [^5]: https://stackshare.io/kafka
+[^6]: https://kafka.apache.org/protocol#protocol_network
+[^7]: https://www.enterpriseintegrationpatterns.com/patterns/messaging/PublishSubscribeChannel.html

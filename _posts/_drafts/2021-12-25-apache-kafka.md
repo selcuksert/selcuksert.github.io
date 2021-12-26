@@ -68,10 +68,44 @@ Kafka is a distributed system of servers and clients that communicate using a pe
 
 With that model Kafka, as a centralized communication hub (nervous system), simplifies communication and message interchange between systems. Systems can send and receive data with no need to know each other. It also embraces the famous publish-subscribe integration pattern[^7] to publish (write) to and subscribe (read) to streams of events with continuously importing/exporting data from other systems.
 
-Kafka has the ability to streams of events durably and reliably as long as it is needed (with the boundary of storage limits) on distributed commit log that it manages. With that event store it is also possible to process streams of events as they occur or retrospectively. Kafka brings distributed, highly scalable, elastic, fault-tolerant, and secure deployment model.
+Kafka has the ability to streams of events durably and reliably as long as it is needed (with the boundary of storage limits) on distributed commit log that it manages. With that event store it is also possible to process streams of events as they happened or historically. Kafka brings distributed, highly scalable, elastic, fault-tolerant, and secure deployment model.
 
+## Kafka as a messaging system
+In its early days, Kafka appeared on the horizon as a messaging system. It is still a messaging system and also a streaming platform that stores data in distributed log files stored on persistent storage. These logs, in fact, are durable records of transactions. They provide a replay-able history and chain of events which can be used to re-build the state of a system at a certain time. Data is ordered and deterministically readable at partition (will be explained soon) level. Kafka is architected to work in cluster mode that is scalable, distributed and highly available. If any of nodes (server or instance that hosts Kafka binaries) in a cluster fails, the load is handed off to other nodes to achieve resiliency and continuity. This also prevents data loss, protects against failures and brings performance benefit. As a messaging middleware, it sits between systems and abstracts communication and integration between them. It can support large number of ad-hoc consumers with no dependency on type or use-case of them. Kafka makes use of consumers that can process large batches of data in timely or windowed fashion with the help of Kafka client API.     
+
+## Basic Concepts
+Apache Kafka runs in a cluster consists of processing nodes called as **brokers**. It organizes messages into **topics** which are logs per use-case/concern. **Producers** are the clients that push messages to broker. **Consumers** are the clients that pull messages from brokers. Topics are divided into **partitions** that shard messages across cluster according to the message keys of events. The event ordering is guaranteed <ins>through partitions</ins> not through topics. An event consists of **header**, **key**, **timestamp** and **value**. Kafka does not care about message formats and structures, as all of the data stored on Kafka is in bytes for the sake of performance. It is up to the clients to serialize and de-serialize messages into more meaningful structure using supported formats such as [Apache Avro](https://avro.apache.org), [Google ProtoBuf](https://developers.google.com/protocol-buffers/) and JSON.     
+
+## Offsets
+Kafka uses offsets as a unique identifier for messages they host on partitions. Offsets also denote the position of an ingested message in the partition. Consumers use offsets to define boundary of message (start-end indexes) stream that they need to consume. Kafka stores latest committed position by consumer to identify the next record that will be given out. Consumers can select automatic, periodic or manual committing. If a consumer app/process fails and restarts the consumer recovers the latest state by consuming events starting from latest committed offset on Kafka. Let's say if a consumer has a offset position committed at 8<sup>th</sup> index, that means it consumed records with offset 0 through 7 and will start to receive record stream beginning at offset 8 at the next iteration. Kafka writes messages in order to partitions indexed uniquely and sequentially via offsets. The address of a message on Kafka contains:
+- The topic that hosts the message
+- The partition that hosts the message
+- The unique offset assigned to the message by Kafka
+
+## Data Management
+Kafka works on dumb broker-smart subscriber mode, which is why it does not care about the state of the consumer and just keeps data as an binary audit trail in distributed log files. Consumers need to know, store, build their state in case of any need. Consumers only communicate with partition leaders elected by Kafka for each topic.  
   
- 
+To make the cluster fault-tolerant and highly-available, and to keep data intact the content of partitions on topics can be copied across brokers (both within corporate datacenters and across geographically dispersed availability zones). With that replication scheme the ingested data always has a copy on multiple brokers for the sake of resilience, backup and avoid outages in case of failures and maintenance operations. The best practice for setting replication factor in production deployment is an odd number, 3 at minimum, to achieve quorum in an election process.
+
+## Message Format
+All messages on Kafka are stored/transmitted as raw bytes. It is required for performance in terms of high I/O throughput, less memory consumption and CPU cycles during data processing. Clients are responsible to serialize and de-serialize these byte streams to higher-level representations (e.g. String, Long, custom models) using protocol formats such as JSON, Avro, ProtoBuf. There is no message type or format checking on Kafka. Here is a list of external serializer/de-serializer (Serde) implementations that are needed for primitive types:
+
+|Data Type|Serde|
+|---------|-----|
+|`byte[]`|`Serdes.ByteArray()`, `Serdes.Bytes()`|
+|`ByteBuffer`|`Serdes.ByteBuffer()`|
+|`Double`|`Serdes.Double()`|
+|`Integer`|`Serdes.Integer()`|
+|`Long`|`Serdes.Long()`|
+|`String`|`Serdes.String()`|
+
+## Consumer Groups
+Consumer groups are set of consumers which cooperate to consume data in parallel. Partitions of all the topics are divided among the consumers in the group. Kafka automatically handles crashed consumers and re-assign previously assigned partitions to available consumers via re-balancing algorithm. Kafka elects a coordinator broker for each group to avoid anarchy (split brain problem) with managing members and partition assignments. The broker that hosts the leader of the partition number for a topic determined by the following formula is the group coordinator:
+```math
+hash(group_id) % (partition # of internal offset topic)
+```
+This calculation balances the load of consumer group management across cluster equally, so that the number of groups can be scaled up via increasing number of brokers. The internal offsets topic `__consumer_offsets`, is used to store committed offsets. When a consumer starts up it finds the coordinator and requests joining that group. Each member must send heartbeats to the coordinator. In case of timeout coordinator kicks off the consumer from group and re-assigns its partitions to another member in group.
+
 [^1]: https://kafka.apache.org/intro#intro_platform
 [^2]: https://www.foreignaffairs.com/articles/united-states/2021-04-16/data-power-new-rules-digital-age
 [^3]: https://www.quora.com/What-is-the-relation-between-Kafka-the-writer-and-Apache-Kafka-the-distributed-messaging-system/answer/Jay-Kreps

@@ -160,11 +160,12 @@ Schema Registry works as an external compute node separate from Kafka brokers. I
 It is also possible to use embedded schema included in events which can be used by clients to define and validate event models. This method is easy to use, brings no additional management and point of failure burdens. However, the event payload size is bigger as additional schema data is included in event payload. When Using Schema Registry the event payload is smaller as schema is stored on Schema Registry. Schema versioning and validation also available on Schema Registry. Schema Registry client libraries have the ability to cache schemas on application that minimize lookup of schemas from remote registry instance. The Achilles heel of Schema Registry is that as a external dependency it stands as a single point of failure. Schema Registry supports working in cluster mode that can be used as a mitigation.
 
 # References
-1. **Kafka: The Definitive Guide**, Neha Narkhede, Gwen Shapira, Todd Palino
-2. **Designing Event-Driven Systems**, Ben Stopford
-3. **Apache Kafka Documentation**, https://kafka.apache.org/documentation 
-4. **Confluent Kafka Documentation**, https://docs.confluent.io/home/overview.html
+- **Kafka: The Definitive Guide**, Neha Narkhede, Gwen Shapira, Todd Palino
+- **Designing Event-Driven Systems**, Ben Stopford
+- **Apache Kafka Documentation**, https://kafka.apache.org/documentation 
+- **Confluent Kafka Documentation**, https://docs.confluent.io/home/overview.html
 
+---------
 [^1]: https://kafka.apache.org/intro#intro_platform
 [^2]: https://www.foreignaffairs.com/articles/united-states/2021-04-16/data-power-new-rules-digital-age
 [^3]: https://www.quora.com/What-is-the-relation-between-Kafka-the-writer-and-Apache-Kafka-the-distributed-messaging-system/answer/Jay-Kreps

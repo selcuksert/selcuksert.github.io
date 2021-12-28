@@ -101,7 +101,7 @@ All messages on Kafka are stored/transmitted as raw bytes. It is required for pe
 
 ## Consumer Groups
 Consumer groups are set of consumers which cooperate to consume data in parallel. Partitions of all the topics are divided among the consumers in the group. Kafka automatically handles crashed consumers and re-assign previously assigned partitions to available consumers via re-balancing algorithm. Kafka elects a coordinator broker for each group to avoid anarchy (split brain problem) with managing members and partition assignments. The broker that hosts the leader of the partition number for a topic determined by the following formula is the group coordinator:
-```math
+```
 hash(group_id) % (partition # of internal offset topic)
 ```
 This calculation balances the load of consumer group management across cluster equally, so that the number of groups can be scaled up via increasing number of brokers. The internal offsets topic `__consumer_offsets`, is used to store committed offsets. When a consumer starts up it finds the coordinator and requests joining that group. Each member must send heartbeats to the coordinator. In case of timeout coordinator kicks off the consumer from group and re-assigns its partitions to another member in group.

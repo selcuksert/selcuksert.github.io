@@ -110,6 +110,50 @@ Using consumer groups enables read parallelization and high workload handling. T
 
 {% include image.html url="/images/apache-kafka/consumer_groups.png" caption="Consumer groups" %}
 
+### Offset Management
+Each consumer in a group determines initial position for reading from a partition. The position of initial reading is determined by consumer configuration `auto.offset.reset` with two options: `earliest` and `latest` which is default. Consumers commit offsets corresponding to the read messages. Default commit policy is `auto` which can be changed via `enable.auto.commit` consumer configuration. This ensures that any message is consumed "at least once". The interval for auto commits is defined via `auto.commit.interval.ms` consumer configuration. To reduce duplicate reads after a crash or restart this interval should be reduced. 
+
+If a use case requires finer control on offset management this configuration should be set as `false`. The Kafka client API provides a `commit()`method that can be invoked within implementation in a controlled manner. If a message needs to be consumed "at most once" this API call can be used with synchronous mode (`KafkaConsumer.commitSync()`) where the consumer retries/blocked until commit succeeds.
+If asynchronous mode via `KafkaConsumer.commitAsync()` is used consumer does not retry on failures, just fires and forgets the commit call. This is more performant then synchronous commits but more unsafe as there may exist a ordering problem that may lead to duplicate reads.
+
+If a consumer crashes or shuts down its partitions are assigned to another member in the group. If it crashes <ins>after</ins> committing the offset newly assigned consumer starts reading from last committed offset of each partition. If it crashes <ins>before</ins> committing newly assigned consumer starts reading based on `auto.offset.reset` policy for that consumer. After consumer restart or re-balance the position of all partitions owned by crashed consumer will be reset to last committed offset. The last committed position may be as old as the auto-commit interval itself. Any messages arrived since the last commit will have to be read again.
+
+## Replication and Partitions
+Kafka evenly distributes messages across partitions according to following formula:
+```
+murmur_hash(message_key) % (total # of partitions) 
+```
+
+The message key hashed with murmur hash function and the reminder of division of it by total number of partitions for topic gives the partition number to write. A sample Python code demonstrates this as follow:
+```python
+>>> import murmurhash
+>>> murmurhash.hash('id_1234')
+-286100597
+>>> murmurhash.hash('id_1234') % 3
+1
+>>> murmurhash.hash('id_1234') % 3
+1
+>>> murmurhash.hash('id_4321') % 3
+0
+>>> murmurhash.hash('id_4320') % 3
+2
+>>> murmurhash.hash('id_4319') % 3
+0
+```
+
+If message key is set as `null`Kafka randomly selects a partition and uses it for forthcoming ones for 10 minutes which is also configurable. As sated before, order is only guaranteed within partition, not across all partitions of a topic.
+
+{% include image.html url="/images/apache-kafka/repl_part.png" caption="| Partitions: 3 | Replication Factor: 3 |" %}
+
+# Schema Registry
+Each message on a topic comprises of key and value. It can be serialized and deserialized as Avro, JSON and ProtoBuf data formats. A schema is structure of data format for both message key and value. As Kafka does not enforce any format checking additional technologies or methods needed to apply such a validation scheme for messages. That is why Confluent designed a solution called **Schema Registry** that exposes RESTful interfaces to store and retrieve schemas and supports Avro, JSON, ProtoBuf formats. It can also tracks versions for schemas based on subject names that Schema Registry groups on. There exists a naming strategy for subject names. There are three options:
+- <ins>TopicNameStrategy</ins>: Subject name based on topic name. It is the default setting.
+- <ins>RecordNameStrategy</ins>: Subject name based on event record models on same topics. Used to group events with different data structures on same topic.
+- <ins>TopicRecordNameStrategy</ins>: Combined version of strategies above. Used to group logically related events with different structures under a subject.
+
+
+
+
 [^1]: https://kafka.apache.org/intro#intro_platform
 [^2]: https://www.foreignaffairs.com/articles/united-states/2021-04-16/data-power-new-rules-digital-age
 [^3]: https://www.quora.com/What-is-the-relation-between-Kafka-the-writer-and-Apache-Kafka-the-distributed-messaging-system/answer/Jay-Kreps

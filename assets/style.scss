@@ -162,7 +162,7 @@ table tr td :last-child {
   font-family: "Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
   width: 750px;
   margin:0 auto;
-  padding: 3rem;
+  padding: 1rem;
 }
 
 .component blockquote.quote {
@@ -204,6 +204,10 @@ table tr td :last-child {
     left: 100%;  
     top: auto;
     bottom: -20px;
+}
+
+cite {
+  font-style: italic;
 }
 //-----blockquote-----
 

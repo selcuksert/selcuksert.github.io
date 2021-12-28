@@ -156,13 +156,9 @@ table tr td :last-child {
   color: #222;
 }
 
-blockquote {
-  float: none;
-  font-size: 1.3em;
-  font-style: italic;
-  color: green;
+figcaption {
   text-align: center;
-  font-family: ui-monospace;
+  font-size: small;
 }
 
 a {

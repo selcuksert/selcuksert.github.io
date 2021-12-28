@@ -2,12 +2,12 @@
 layout: post
 title:  Apache Kafka
 categories: [Apache Kafka,Messaging,PubSub,Event Driven,Data,Processing,Streaming]
-excerpt: ... Another interpretion of this statement would be the importance of fullfilling the needs with the right application capabilities that turns data into most meaningful asset nowadays, aka information. Unless underpinned with right technology stack it is very hard to lay the foundation for a solid and sustainable enterprise architecture. As an event streaming platform evolved from a publish-subscribe messaging system, Apache Kafka manifests itself as a technology to collect, process, store and data at scale in a performant and reliable way.
+excerpt: ... Another interpretation of this statement would be the importance of fulfilling the needs with the right application capabilities that turns data into most meaningful asset nowadays, aka information. Unless underpinned with right technology stack it is very hard to lay the foundation for a solid and sustainable enterprise architecture. As an event streaming platform evolved from a publish-subscribe messaging system, Apache Kafka manifests itself as a technology to collect, process, store and data at scale in a performant and reliable way.
 ---
 [TOGAF<sup>&copy;</sup>](https://pubs.opengroup.org/architecture/togaf91-doc/arch/chap12.html#tag_12_01) describes Technology Architecture as follows:
 > Develop the Target Technology Architecture that enables the logical and physical application and data components and the Architecture Vision, addressing the Request for Architecture Work and stakeholder concerns.
 
-Another interpretion of this statement would be the importance of fullfilling the needs with the right application capabilities that turns data into most meaningful asset nowadays, aka **information**. Unless underpinned with right technology stack it is very hard to shape a technology architecture that lays the foundation for enterprise architecture (EA). A solid and sustainable EA is the way to support the business vision and to achieve business outcomes that deliver value for customers so that for enterprise. 
+Another interpretation of this statement would be the importance of fulfilling the needs with the right application capabilities that turns data into most meaningful asset nowadays, aka **information**. Unless underpinned with right technology stack it is very hard to shape a technology architecture that lays the foundation for enterprise architecture (EA). A solid and sustainable EA is the way to support the business vision and to achieve business outcomes that deliver value for customers so that for enterprise. 
 
 As an event streaming platform evolved from a publish-subscribe messaging system, Apache Kafka manifests itself as a technology to collect, process, store the data at scale in a performant and reliable way[^1].
 
@@ -146,13 +146,24 @@ If message key is set as `null`Kafka randomly selects a partition and uses it fo
 {% include image.html url="/images/apache-kafka/repl_part.png" caption="| Partitions: 3 | Replication Factor: 3 |" %}
 
 # Schema Registry
-Each message on a topic comprises of key and value. It can be serialized and deserialized as Avro, JSON and ProtoBuf data formats. A schema is structure of data format for both message key and value. As Kafka does not enforce any format checking additional technologies or methods needed to apply such a validation scheme for messages. That is why Confluent designed a solution called **Schema Registry** that exposes RESTful interfaces to store and retrieve schemas and supports Avro, JSON, ProtoBuf formats. It can also tracks versions for schemas based on subject names that Schema Registry groups on. There exists a naming strategy for subject names. There are three options:
+Each message on a topic comprises of key and value. It can be serialized and deserialized as Avro, JSON and ProtoBuf data formats. ProtoBuf and Avro have compact byte representations and they bring network bandwidth and storage benefits. A schema is structure of data format for both message key and value. As Kafka does not enforce any format checking additional technologies or methods needed to apply such a validation scheme for messages. That is why Confluent designed a solution called **Schema Registry** that exposes RESTful interfaces to store and retrieve schemas and supports Avro, JSON, ProtoBuf formats. It can also tracks versions for schemas based on subject names that Schema Registry groups on. There exists a naming strategy for subject names. There are three options:
 - <ins>TopicNameStrategy</ins>: Subject name based on topic name. It is the default setting.
 - <ins>RecordNameStrategy</ins>: Subject name based on event record models on same topics. Used to group events with different data structures on same topic.
 - <ins>TopicRecordNameStrategy</ins>: Combined version of strategies above. Used to group logically related events with different structures under a subject.
 
+If `TopicNameStrategy` is used all messages in the same topic should conform to the same schema (one schema per topic). Otherwise, a new record type can break compatibility checks on the topic. This strategy works well where all messages can be grouped by topic (e.g. logging events). Other types of naming strategies suit well where a topic can have records with multiple schemas. One can register multiple versions of a schema. Schema Registry checks whether it is forward or backward compatible. Different producers and consumers can co-exist with different versions of same schema in a compatible way. To integrate with Schema Registry serializer and de-serializer (SerDe) implementations are needed. Java, .NET, Python and Ruby are the supported programming languages for SerDe libraries. 
 
+{% include image.html url="/images/apache-kafka/sr.png" caption="Schema Registry Architecture (Source: https://docs.confluent.io/platform/current/schema-registry/index.html)" %}
 
+Schema Registry works as an external compute node separate from Kafka brokers. It uses Kafka as underlying storage layer that is distributed and durable. Producers can concurrently query Schema Registry to submit and retrieve schemas of event data models. Each schema has a unique ID assigned globally. It is monotonically increasing and unique and it may not be consecutively incremented. It supports working in distributed mode with single-master architecture. Zookeeper coordinates primary node selection in that architecture.
+
+It is also possible to use embedded schema included in events which can be used by clients to define and validate event models. This method is easy to use, brings no additional management and point of failure burdens. However, the event payload size is bigger as additional schema data is included in event payload. When Using Schema Registry the event payload is smaller as schema is stored on Schema Registry. Schema versioning and validation also available on Schema Registry. Schema Registry client libraries have the ability to cache schemas on application that minimize lookup of schemas from remote registry instance. The Achilles heel of Schema Registry is that as a external dependency it stands as a single point of failure. Schema Registry supports working in cluster mode that can be used as a mitigation.
+
+# References
+1. **Kafka: The Definitive Guide**, Neha Narkhede, Gwen Shapira, Todd Palino
+2. **Designing Event-Driven Systems**, Ben Stopford
+3. **Apache Kafka Documentation**, https://kafka.apache.org/documentation 
+4. **Confluent Kafka Documentation**, https://docs.confluent.io/home/overview.html
 
 [^1]: https://kafka.apache.org/intro#intro_platform
 [^2]: https://www.foreignaffairs.com/articles/united-states/2021-04-16/data-power-new-rules-digital-age

@@ -5,7 +5,7 @@ categories: [Apache Kafka,Messaging,PubSub,Event Driven,Data,Processing,Streamin
 excerpt: ... Another interpretation of this statement would be the importance of fulfilling the needs with the right application capabilities that turns data into most meaningful asset nowadays, aka information. Unless underpinned with right technology stack it is very hard to lay the foundation for a solid and sustainable enterprise architecture. As an event streaming platform evolved from a publish-subscribe messaging system, Apache Kafka manifests itself as a technology to collect, process, store and data at scale in a performant and reliable way.
 ---
 [TOGAF<sup>&copy;</sup>](https://pubs.opengroup.org/architecture/togaf91-doc/arch/chap12.html#tag_12_01) describes Technology Architecture as follows:
-> Develop the Target Technology Architecture that enables the logical and physical application and data components and the Architecture Vision, addressing the Request for Architecture Work and stakeholder concerns.
+{% include pullquote.html quote="Develop the Target Technology Architecture that enables the logical and physical application and data components and the Architecture Vision, addressing the Request for Architecture Work and stakeholder concerns." cite="TOGAF<sup>&copy;</sup> 9.1" %}
 
 Another interpretation of this statement would be the importance of fulfilling the needs with the right application capabilities that turns data into most meaningful asset nowadays, aka **information**. Unless underpinned with right technology stack it is very hard to shape a technology architecture that lays the foundation for enterprise architecture (EA). A solid and sustainable EA is the way to support the business vision and to achieve business outcomes that deliver value for customers so that for enterprise. 
 
@@ -20,7 +20,7 @@ A business produces data at every stage of its lifetime while:
 - Delivering value and services to its customers
 
 The global data traffic increased 112 times from 2008 to 2020.[^2] To unleash the power of such a massive amount of data, it should be transformed into a more meaningful asset, information, using right combination of application and technology stack while specification, monitoring, execution of business processes. Because:
-> "Every company is a technology company, regardless of what business they think they are in. A bank is just an IT company with a banking license." <br/>― _Christopher Little_  
+{% include pullquote.html quote="Every company is a technology company, regardless of what business they think they are in. A bank is just an IT company with a banking license." cite="Christopher Little" %}
 
 This information is then used to gain **knowledge** in a quick and a straightforward way. It is the primary tool for understanding and overcoming business challenges in fast-paced and ever-changing world.
 

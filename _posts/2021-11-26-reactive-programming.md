@@ -9,8 +9,8 @@ IT organizations have the responsibility to rationalize business outcomes with t
 Until recently, enterprise grade applications hosted on tens of servers, respond in seconds and need hours of offline maintenance, and they are subject to gigabytes of data. Whereas due to high utilization rate, data traffic throughout digital channels to servers reached level of petabytes. To meet these demands organizations need systems that are more robust, more resilient, and more flexible. So today’s applications are running on lots of platforms from mobile devices to cloud-based virtual servers that have thousands of multi-core processors. In addition, a paradigm emerged in systems domain began to take more place in technology architecture: **Reactive Systems**
 
 According to the Oxford Dictionary, there are two main definitions for the term reactive:
-{% include pullquote.html quote="Showing a response to a stimulus." %}
-{% include pullquote.html quote="Acting in response to a situation rather than creating or controlling it." %}
+{% include pullquote.html quote="Showing a response to a stimulus." cite="Oxford Dictionary" %}
+{% include pullquote.html quote="Acting in response to a situation rather than creating or controlling it." cite="Oxford Dictionary" %}
 
 As the definitions tell themselves, anything that is reactive needs an external cause or trigger to become active. Based on that context, a reactive system simply keeps up a perpetual interaction with its environment (e.g. human intervention, physical environment, other reactive systems, etc.). As an example, heat energy comprising of a heater and a switch to activate/de-active it is a reactive system that has the ability to react to the user who switches on/off.
 

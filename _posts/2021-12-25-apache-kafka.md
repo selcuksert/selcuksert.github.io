@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Apache Kafka
+title:  Apache Kafka - Part I - Concepts
 categories: [Apache Kafka,Messaging,PubSub,Event Driven,Data,Processing,Streaming]
 excerpt: ... Another interpretation of this statement would be the importance of fulfilling the needs with the right application capabilities that turns data into most meaningful asset nowadays, aka information. Unless underpinned with right technology stack it is very hard to lay the foundation for a solid and sustainable enterprise architecture. As an event streaming platform evolved from a publish-subscribe messaging system, Apache Kafka manifests itself as a technology to collect, process, store and data at scale in a performant and reliable way.
 ---
@@ -88,7 +88,7 @@ Kafka works on dumb broker-smart subscriber mode, which is why it does not care 
 To make the cluster fault-tolerant and highly-available, and to keep data intact the content of partitions on topics can be copied across brokers (both within corporate datacenters and across geographically dispersed availability zones). With that replication scheme the ingested data always has a copy on multiple brokers for the sake of resilience, backup and avoid outages in case of failures and maintenance operations. The best practice for setting replication factor in production deployment is an odd number, 3 at minimum, to achieve quorum in an election process.
 
 ## Message Format
-All messages on Kafka are stored/transmitted as raw bytes. It is required for performance in terms of high I/O throughput, less memory consumption and CPU cycles during data processing. Clients are responsible to serialize and de-serialize these byte streams to higher-level representations (e.g. String, Long, custom models) using protocol formats such as JSON, Avro, ProtoBuf. There is no message type or format checking on Kafka. Here is a list of external serializer/de-serializer (Serde) implementations that are needed for primitive types:
+All messages on Kafka are stored/transmitted as raw bytes. It is required for performance in terms of high I/O throughput, less memory consumption and CPU cycles during data processing. Demo[^8] showed that a cloud hosted Kafka cluster handles 10GB/sec. Clients are responsible to serialize and de-serialize these byte streams to higher-level representations (e.g. String, Long, custom models) using protocol formats such as JSON, Avro, ProtoBuf. There is no message type or format checking on Kafka. Here is a list of external serializer/de-serializer (Serde) implementations that are needed for primitive types:
 
 |Data Type|Serde|
 |---------|-----|
@@ -146,7 +146,56 @@ If message key is set as `null`Kafka randomly selects a partition and uses it fo
 {% include image.html url="/images/apache-kafka/repl_part.png" caption="| Partitions: 3 | Replication Factor: 3 |" %}
 
 # Schema Registry
-Each message on a topic comprises of key and value. It can be serialized and deserialized as Avro, JSON and ProtoBuf data formats. ProtoBuf and Avro have compact byte representations and they bring network bandwidth and storage benefits. A schema is structure of data format for both message key and value. As Kafka does not enforce any format checking additional technologies or methods needed to apply such a validation scheme for messages. That is why Confluent designed a solution called **Schema Registry** that exposes RESTful interfaces to store and retrieve schemas and supports Avro, JSON, ProtoBuf formats. It can also tracks versions for schemas based on subject names that Schema Registry groups on. There exists a naming strategy for subject names. There are three options:
+Each message on a topic comprises of key and value. It can be serialized and deserialized as Avro, JSON and ProtoBuf data formats. ProtoBuf and Avro have compact byte representations and they bring network bandwidth and storage benefits. A schema is structure of data format for both message key and value. As Kafka does not enforce any format checking additional technologies or methods needed to apply such a validation scheme for messages. That is why Confluent designed a solution called **Schema Registry** that exposes RESTful interfaces to store and retrieve schemas and supports Avro, JSON, ProtoBuf formats. A sample Avro schema is as follows and [`avro-maven-plugin`](https://mvnrepository.com/artifact/org.apache.avro/avro-maven-plugin) can be used to generate serializable model/event classes from that schema: 
+
+```json
+[
+    {
+        "type": "enum",
+        "name": "TaskState",
+        "namespace": "com.corp.concepts.taskmanager.models",
+        "symbols": [
+            "ASSIGNED",
+            "STARTED",
+            "COMPLETED",
+            "PENDING"
+        ]
+    },
+    {
+        "type": "record",
+        "name": "Task",
+        "namespace": "com.corp.concepts.taskmanager.models",
+        "fields": [
+            {
+                "name": "id",
+                "type": "string"
+            },
+            {
+                "name": "userid",
+                "type": "string"
+            },
+            {
+                "name": "duedate",
+                "type": "string"
+            },
+            {
+                "name": "title",
+                "type": "string"
+            },
+            {
+                "name": "details",
+                "type": "string"
+            },
+            {
+                "name": "status",
+                "type": "TaskState"
+            }
+        ]
+    }
+]
+```
+
+It can also tracks versions for schemas based on subject names that Schema Registry groups on. There exists a naming strategy for subject names. There are three options:
 - <ins>TopicNameStrategy</ins>: Subject name based on topic name. It is the default setting.
 - <ins>RecordNameStrategy</ins>: Subject name based on event record models on same topics. Used to group events with different data structures on same topic.
 - <ins>TopicRecordNameStrategy</ins>: Combined version of strategies above. Used to group logically related events with different structures under a subject.
@@ -158,6 +207,9 @@ If `TopicNameStrategy` is used all messages in the same topic should conform to 
 Schema Registry works as an external compute node separate from Kafka brokers. It uses Kafka as underlying storage layer that is distributed and durable. Producers can concurrently query Schema Registry to submit and retrieve schemas of event data models. Each schema has a unique ID assigned globally. It is monotonically increasing and unique and it may not be consecutively incremented. It supports working in distributed mode with single-master architecture. Zookeeper coordinates primary node selection in that architecture.
 
 It is also possible to use embedded schema included in events which can be used by clients to define and validate event models. This method is easy to use, brings no additional management and point of failure burdens. However, the event payload size is bigger as additional schema data is included in event payload. When Using Schema Registry the event payload is smaller as schema is stored on Schema Registry. Schema versioning and validation also available on Schema Registry. Schema Registry client libraries have the ability to cache schemas on application that minimize lookup of schemas from remote registry instance. The Achilles heel of Schema Registry is that as a external dependency it stands as a single point of failure. Schema Registry supports working in cluster mode that can be used as a mitigation.
+
+# What is next?
+This is the first part of Apache Kafka article series. The [next one](#) is about cutting-edge Kafka Streams technology that enables to implement MSA (Microservices Architecture) compliant stream processing/event streaming applications using Apache Kafka as a data backbone with all of the scalability and availability features of Kafka cluster. 
 
 # References
 - **Kafka: The Definitive Guide**, Neha Narkhede, Gwen Shapira, Todd Palino
@@ -173,3 +225,4 @@ It is also possible to use embedded schema included in events which can be used 
 [^5]: https://stackshare.io/kafka
 [^6]: https://kafka.apache.org/protocol#protocol_network
 [^7]: https://www.enterpriseintegrationpatterns.com/patterns/messaging/PublishSubscribeChannel.html
+[^8]: https://www.confluent.io/blog/scaling-kafka-to-10-gb-per-second-in-confluent-cloud/

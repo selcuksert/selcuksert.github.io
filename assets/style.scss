@@ -172,6 +172,7 @@ table tr td :last-child {
     width: 80%;  /* create space for the quotes */
     color: #484748;
     margin: 1rem auto 2rem;
+    z-index: -1;
 }
 .component blockquote.EN {
     background:

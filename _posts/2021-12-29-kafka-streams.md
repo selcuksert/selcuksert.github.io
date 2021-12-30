@@ -90,23 +90,19 @@ With Kafka Streams, it is possible to specify the amount of memory used for a to
 Kafka Streams API has a high-level DSL (Domain Specific Language) that enables to use capabilities/processing formats above via some abstractions. These abstractions are:
 
 #### KStream
-`KStream` is an abstraction of a record stream on a source topic partition. Data is represented as independent events based on insert semantics.
-https://github.com/selcuksert/task-manager/blob/6f8b9d3bdc884e4c34cb89fcb20cfbd634ff1425/backend/services/task-processor/src/main/java/com/corp/concepts/taskmanager/services/processor/TaskProcessor.java#L40-L55
+`KStream` is an abstraction of a record stream on a source topic partition. Data is represented as independent events based on insert semantics ([Sample Code](https://github.com/selcuksert/task-manager/blob/6f8b9d3bdc884e4c34cb89fcb20cfbd634ff1425/backend/services/task-processor/src/main/java/com/corp/concepts/taskmanager/services/processor/TaskProcessor.java#L40-L55)).
 
 #### KTable
-It is an abstraction of a partitioned table (changelog stream). Data is represented using update semantics. `KTable`s are partitioned. Each KS task only contains a subset of full table (topic partition). It is a real-time snapshot of fast-moving event stream and can be queried instantly. It is also possible to build relations on a bunch of streams using `KTable`. With the combination of low-latency, event-driven, microservices architecture compliant nature of KS apps, `KTable` is a well-suited API for stream relational processing. For large key spaces (lots of uniqueness), `KTable` is able to distribute fragments of entire state across KS app instances. As fragmentation is in effect, this API brings less storage overhead on KS apps.
-https://github.com/spring-cloud/spring-cloud-stream-samples/blob/efaa4c69c29c3027b288b6302ce877250dfd595d/kafka-streams-samples/kafka-streams-table-join/src/main/java/kafka/streams/table/join/KafkaStreamsTableJoin.java#L40-L52
+It is an abstraction of a partitioned table (changelog stream). Data is represented using update semantics. `KTable`s are partitioned. Each KS task only contains a subset of full table (topic partition). It is a real-time snapshot of fast-moving event stream and can be queried instantly. It is also possible to build relations on a bunch of streams using `KTable`. With the combination of low-latency, event-driven, microservices architecture compliant nature of KS apps, `KTable` is a well-suited API for stream relational processing. For large key spaces (lots of uniqueness), `KTable` is able to distribute fragments of entire state across KS app instances. As fragmentation is in effect, this API brings less storage overhead on KS apps ([Sample Code](https://github.com/spring-cloud/spring-cloud-stream-samples/blob/efaa4c69c29c3027b288b6302ce877250dfd595d/kafka-streams-samples/kafka-streams-table-join/src/main/java/kafka/streams/table/join/KafkaStreamsTableJoin.java#L40-L52)).
 
 #### GlobalKTable
-`GlobalKTable` resembles `KTable` except it contains complete (un-partitioned) copy of underlying data in each KS app that it is used.
-https://github.com/selcuksert/task-manager/blob/6f8b9d3bdc884e4c34cb89fcb20cfbd634ff1425/backend/services/task-processor/src/main/java/com/corp/concepts/taskmanager/services/processor/TaskProcessor.java#L57-L84
+`GlobalKTable` resembles `KTable` except it contains complete (un-partitioned) copy of underlying data in each KS app that it is used
+([Sample Code](https://github.com/selcuksert/task-manager/blob/6f8b9d3bdc884e4c34cb89fcb20cfbd634ff1425/backend/services/task-processor/src/main/java/com/corp/concepts/taskmanager/services/processor/TaskProcessor.java#L57-L84)).
 
 ### Co-partitioning
 `KStream-KStream`, `KTable-KTable`, `KStream-KTable` joins require **co-partitioning**. To achieve true relation between events or compute aggregations on sequence of events related events should be routed to same partition and they should be handled by same task. KStream-GlobalKTable joins does not require co-partitioning as state is fully replicated/un-partitioned in `GlobalKTable`. There exists some requirements for co-partitioning:
 - Records on both sides must be keyed by same field.
-- Records on both sides must be partitioned on that key as same partitioning strategy should be used for that key (re-keying). `selectKey` method is used on un-keyed KStream. Re-keying ensures related records appear on same partition:
-
-https://gist.github.com/confluentgist/cc9729382f2feff5f910e6e51b9f4780#file-streamsjoinwithrepartitioning-java-L39-L46
+- Records on both sides must be partitioned on that key as same partitioning strategy should be used for that key (re-keying). `selectKey` method is used on un-keyed KStream. Re-keying ensures related records appear on same partition ([Sample Code](https://gist.github.com/confluentgist/cc9729382f2feff5f910e6e51b9f4780#file-streamsjoinwithrepartitioning-java-L39-L46)):
 
 ### Grouping
 Stream or table data needs to be re-grouped before aggregation. The aim is to ensure that related records are processed by same task. Following operators are used for grouping streams:
@@ -170,8 +166,7 @@ With continuous refinement each result should be seen “potentially” incomple
 - <ins>Suppression</ins>: It solves problem of emitting intermediate results in windowed aggregation. `suppress()` operator is used to only emit final computation of window, and to hold intermediate computations temporarily in memory.
 
 ## Interactive Queries
-Kafka Streams API has enables to implement a stream processing layer that can be utilized as a lightweight embedded database. The latest state can directly be queried via endpoints (e.g. RESTful WS) exposed by KS micro apps. But the problem is if one uses KTable for materialization the microservice that handles the request may not respond with value for queried key as local state only represents a partial view of the entire application state which in fact is the nature of a KTable. Interactive queries feature of KS API enables to get value for a given key event it does not exist on local KTable as it enables to use Kafka as a service discovery engine to find the KS app that hosts that key-value pair using metadata stored on Kafka.
-https://github.com/selcuksert/task-manager/blob/6f8b9d3bdc884e4c34cb89fcb20cfbd634ff1425/backend/services/task-processor/src/main/java/com/corp/concepts/taskmanager/services/service/QueryService.java#L66-L144
+Kafka Streams API has enables to implement a stream processing layer that can be utilized as a lightweight embedded database. The latest state can directly be queried via endpoints (e.g. RESTful WS) exposed by KS micro apps. But the problem is if one uses KTable for materialization the microservice that handles the request may not respond with value for queried key as local state only represents a partial view of the entire application state which in fact is the nature of a KTable. Interactive queries feature of KS API enables to get value for a given key event it does not exist on local KTable as it enables to use Kafka as a service discovery engine to find the KS app that hosts that key-value pair using metadata stored on Kafka ([Sample Code](https://github.com/selcuksert/task-manager/blob/6f8b9d3bdc884e4c34cb89fcb20cfbd634ff1425/backend/services/task-processor/src/main/java/com/corp/concepts/taskmanager/services/service/QueryService.java#L66-L144)).
 
 {% include image.html url="/images/apache-kafka/interactive_queries.png" caption="Interactive Queries in Kafka Streams" %}
 

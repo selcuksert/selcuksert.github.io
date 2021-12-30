@@ -60,7 +60,7 @@ Each Kafka Stream application is designed to perform computation on real-time ev
 - <ins>Source Processor</ins>: This type of processor has no upstream processor and just reads data from a topic to send to one or more downstream processors.
 - <ins>Sink Processor</ins>: This type of processor just sends received records from up-stream processors to a Kafka topic. It just writes resultant records of computations performed by upstream processors back to Kafka and has no downstream processors.
 
-{% include image.html url="/images/processor_topology.png" caption="Kafka Streams Processor Topology" %}
+{% include image.html url="/images/apache-kafka/processor_topology.png" caption="Kafka Streams Processor Topology" %}
 
 A topology processes records one by one, until a record visits each stream processor. After all processing is done for a record next one is processed. If a topology comprises of sub-topologies aforementioned strategy is just applied in sub-topology level not for main topology.
 
@@ -75,15 +75,15 @@ It is also possible to configure number of **thread**s that Kafka Streams librar
 ## Streams and Tables
 A **stream** in Kafka Streams context resembles an insert operation on a database table. Each distinct record is appended to the actual view of Kafka log (as in a Blockchain ledger).
 
-{% include image.html url="/images/stream.png" caption="Streams in Kafka Streams World" %}
+{% include image.html url="/images/apache-kafka/stream.png" caption="Streams in Kafka Streams World" %}
 
 A **table** in Kafka Streams world resembles an update operation on a database table. Only latest or aggregated state/value is retained for an event key. Tables are materialized on KS app using a key-value state store based on [RocksDB](http://rocksdb.org/). IOW, KS app hosts a local copy of actual state of events per key from table abstractions. In Kafka Streams context, table is not something consumed from Kafka, but something built on application side. 
 
-{% include image.html url="/images/table.png" caption="Tables in Kafka Streams World" %}
+{% include image.html url="/images/apache-kafka/table.png" caption="Tables in Kafka Streams World" %}
 
 To achieve true resiliency, any data stored in a local state store is also stored remotely on Kafka **changelog topic**s. Changelog topic is _compacted_ topic which only keeps the latest value of an event for a key. In case any KS app failure or restart, a table's data can always be restored from its change stream via changelog topic by same application or another application in a group. It is also possible to persist state store on disk asynchronously (`state.dir` configuration). In normal conditions, KS app keeps smaller data in memory until it gets bigger or write buffer is full. Otherwise, it spills state to persistent file system. So that, state can be re-built using this data on dik instead of replaying entire topic and only missing data on local state is replayed from topic. 
 
-{% include image.html url="/images/changelog_topic.png" caption="Changelog Topics" %}
+{% include image.html url="/images/apache-kafka/changelog_topic.png" caption="Changelog Topics" %}
 
 With Kafka Streams, it is possible to specify the amount of memory used for a topology instance. The internal cache maintained on KS app uses that memory to compact records before they are persisted on state stores, or forwarded downstream processors. This memory is shared evenly across Kafka Stream threads in a topology where each thread manages a memory pool available for tasks in a processor nodes. In essence, this is used by processors (nodes) that perform stateful operations like aggregation backing with a local state store. 
 
@@ -162,7 +162,7 @@ Windowing is a method for grouping records into different time-based subgroups f
     - Like sliding join windows boundaries are aligned to the record timestamps (as opposed to timestamp) and boundaries are inclusive.
     - Records will fall within the same window, if the difference between their timestamps is within the specified window size.
 
-{% include image.html url="/images/windowing.png" caption="Windowing in Kafka Streams" %}
+{% include image.html url="/images/apache-kafka/windowing.png" caption="Windowing in Kafka Streams" %}
 
 ## Ordering
 Kafka <ins>does guarantee</ins> events will always be in “offset” order of partition level. Consumers always read events in same sequence that they were appended to the topic (ascending). Unbounded event streams may not always be in “timestamp” order especially for event-time semantics. Events are sometimes delayed. A record with certain timestamp does not always mean that all preceding records consumed. There exists a tradeoff between waiting a certain amount of data (completeness) and propagating updates, even incomplete, downstream immediately (reducing latency). Latency optimization is possible in KS API using continuous refinement. Whenever a new event is added to the window, KS app will emit new window computation immediately.
@@ -175,7 +175,7 @@ With continuous refinement each result should be seen “potentially” incomple
 ## Interactive Queries
 Kafka Streams API has enables to implement a stream processing layer that can be utilized as a lightweight embedded database. The latest state can directly be queried via endpoints (e.g. RESTful WS) exposed by KS micro apps. But the problem is if one uses KTable for materialization the microservice that handles the request may not respond with value for queried key as local state only represents a partial view of the entire application state which in fact is the nature of a KTable. Interactive queries feature of KS API enables to get value for a given key event it does not exist on local KTable as it enables to use Kafka as a service discovery engine to find the KS app that hosts that key-value pair using metadata stored on Kafka.
 
-{% include image.html url="/images/interactive_queries.png" caption="Interactive Queries in Kafka Streams" %}
+{% include image.html url="/images/apache-kafka/interactive_queries.png" caption="Interactive Queries in Kafka Streams" %}
 
 https://github.com/selcuksert/task-manager/blob/6f8b9d3bdc884e4c34cb89fcb20cfbd634ff1425/backend/services/task-processor/src/main/java/com/corp/concepts/taskmanager/services/service/QueryService.java#L66-L144
 

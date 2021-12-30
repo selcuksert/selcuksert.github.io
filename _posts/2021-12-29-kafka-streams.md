@@ -135,26 +135,26 @@ It is the time when the event is processed by KS app. It occurs after event and 
     
 ### Windowing
 Windowing is a method for grouping records into different time-based subgroups for aggregating and joining. It lets to group records that have same key for stateful operations (e.g. aggregations, joins) into time spans. There are several types of windowing methods:
-- Tumbling Windows: 
+- <ins>Tumbling Windows</ins>: 
     - Windows are in fixed size that never overlap.
     - Is defined using “window size” (in milliseconds)
     - Have predictable time ranges since they are aligned with the epoch and each other
-        - 1st window starts at timestamp 0:  0-5 | 5-10 | 10-15
+        - 1st window starts at timestamp 0: 0-5, 5-10, 10-15
         - Start time is inclusive, end time is exclusive
-- Hopping Windows:
+- <ins>Hopping Windows</ins>:
     - Windows are in fixed size that may overlap.
     - 2 parameters needed: Window size, advance interval (how much window moves forward)
-- Session Windows:
+- <ins>Session Windows</ins>:
     - Variable-sized windows determined by periods of activity followed by gaps of inactivity
     - Defined using “inactivity gap”:
         - If it is 5 seconds each record that has a timestamp within 5 secs of the previous record with the same key will be merged into same window.
         - Both the lower and upper boundaries are inclusive.
     - Useful for user behavior analysis (e.g. Counting user visits on a digital channel, customer-conversion rate)
-- Sliding Join Windows:
+- <ins>Sliding Join Windows</ins>:
     - Fixed size windows used for joining and has only defined via “window size” parameter
     - 2 records fall within the same window when “time difference between them” ≤ “window size”
     - Lower and upper bounds are inclusive. Keys must match since streams are joined.
-- Sliding Aggregation Windows: 
+- <ins>Sliding Aggregation Windows</ins>: 
     - Sliding Windows with “time difference” and “grace” (`SlidingWindows.withTimeDifferenceAndGrace()`)
     - Like sliding join windows boundaries are aligned to the record timestamps (as opposed to timestamp) and boundaries are inclusive.
     - Records will fall within the same window, if the difference between their timestamps is within the specified window size.

@@ -212,6 +212,10 @@ cite {
 }
 //-----blockquote-----
 
+footnotes {
+  overflow-wrap: break-word;
+}
+
 figcaption {
   text-align: center;
   font-size: small;

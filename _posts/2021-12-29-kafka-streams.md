@@ -168,7 +168,7 @@ With continuous refinement each result should be seen “potentially” incomple
 ## Interactive Queries
 Kafka Streams API has enables to implement a stream processing layer that can be utilized as a lightweight embedded database. The latest state can directly be queried via endpoints (e.g. RESTful WS) exposed by KS micro apps. But the problem is if one uses KTable for materialization the microservice that handles the request may not respond with value for queried key as local state only represents a partial view of the entire application state which in fact is the nature of a KTable. Interactive queries feature of KS API enables to get value for a given key event it does not exist on local KTable as it enables to use Kafka as a service discovery engine to find the KS app that hosts that key-value pair using metadata stored on Kafka ([Sample Code](https://github.com/selcuksert/task-manager/blob/6f8b9d3bdc884e4c34cb89fcb20cfbd634ff1425/backend/services/task-processor/src/main/java/com/corp/concepts/taskmanager/services/service/QueryService.java#L66-L144)).
 
-{% include image.html url="/images/apache-kafka/interactive_queries.png" caption="Interactive Queries in Kafka Streams" %}
+{% include image.html url="/images/apache-kafka/interactive_queries.png" caption="Interactive Queries in Kafka Streams (Source: https://docs.confluent.io/platform/current/streams/developer-guide/interactive-queries.html)" %}
 
 # What is next?
 This is the second part of Apache Kafka article series. The [next one](#) is about another niche technology in Apache Kafka ecosystem: **ksqlDB**. It is the Kafka native database for stream processing applications that streamlines to build stream processing applications with a SQL like interface. 

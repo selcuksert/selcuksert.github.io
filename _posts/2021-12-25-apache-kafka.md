@@ -84,14 +84,14 @@ Kafka uses offsets as a unique identifier for messages they host on partitions. 
 - The partition that hosts the message
 - The unique offset assigned to the message by Kafka
 
-## Zookeeper and it removal
+## Zookeeper and its removal
 As Kafka works in distributed fashion there needs to be a metadata manager (like etcd in a Kubernetes cluster) to store and manage the state of the clustered objects such as partitions, the role of replicas, etc. Another Apache project [ZooKeeper](https://zookeeper.apache.org/) was the choice to address this need. As the time passes, the evolution of Apache Kafka and the offerings brought by it raised questions on having and maintaining additional technology implementation like ZooKeeper. To avoid additional burden on management, communication and performance triggered the community to find a way to internalize the capabilities brought by ZooKeeper.
 
 [KIP-500: Replace ZooKeeper with a self-managed quorum](https://cwiki.apache.org/confluence/display/KAFKA/KIP-500%3A+Replace+ZooKeeper+with+a+Self-Managed+Metadata+Quorum) is the improvement proposal that led to a new method of managing the metadata of cluster introduced in Kafka version 2.8.0: **The Quorum Controller**[^8]. The set of controllers can be nodes on a existing Kafka cluster or on a different hardware stack in case of any need and they establish a quorum. These controllers use a brand new protocol called <ins>KRaft</ins>. This protocol is used to ensure that the metadata is consistently distributed and replicated across nodes using a new internal topic named `@metadata`. In essence, KRaft inherits from well-known [Raft](https://raft.github.io/) algorithm which is designed to achieve consensus on distributed systems in a fault-tolerant and performant way. KRaft is also used to delegate role of leader in this quorum to a node which is the <ins>quorum controller</ins>.  
 
 ![KIP-500](https://cwiki.apache.org/confluence/download/attachments/123898922/a.png?version=1&modificationDate=1564694752000&api=v2)
 
-As of writing, the implementation **is not** production ready yet and ZooKeeper is **still** the main dependency to shape a Kafka cluster in production grade systems. 
+As the time of writing, the implementation **is not** production ready yet and ZooKeeper is **still** the main dependency to shape a Kafka cluster in production grade systems. 
 
 ## Data Management
 Kafka works on dumb broker-smart subscriber mode, which is why it does not care about the state of the consumer and just keeps data as an binary audit trail in distributed log files. Consumers need to know, store, build their state in case of any need. Consumers only communicate with partition leaders elected by Kafka for each topic.  

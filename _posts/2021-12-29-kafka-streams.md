@@ -171,7 +171,7 @@ Kafka Streams API has enables to implement a stream processing layer that can be
 {% include image.html url="/images/apache-kafka/interactive_queries.png" caption="Interactive Queries in Kafka Streams (Source: https://docs.confluent.io/platform/current/streams/developer-guide/interactive-queries.html)" %}
 
 # What is next?
-This is the second part of Apache Kafka article series. The [next one](#) is about another niche technology in Apache Kafka ecosystem: **ksqlDB**. It is the Kafka native database for stream processing applications that streamlines to build stream processing applications with a SQL like interface. 
+This is the second part of Apache Kafka article series. The [next one](/ksqldb) is about another niche technology in Apache Kafka ecosystem: **ksqlDB**. It is the Kafka native database for stream processing applications that streamlines to build stream processing applications with a SQL like interface. 
 
 # References
 - **Mastering Kafka Streams and ksqlDB**, Mitch Seymour

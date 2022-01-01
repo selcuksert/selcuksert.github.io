@@ -118,7 +118,7 @@ It is the time when an event is generated at the source. It can be embedded in e
 #### Ingestion Time
 It is the time when an event is appended to a partition on a broker node. It always occurs after event time.
 
-#### Ingestion Time
+#### Processing Time
 It is the time when the event is processed by KS app. It occurs after event and ingestion times. It is less static that event time which means re-processing same data will lead to new processing timestamps. So, it may lead to non-deterministic windowing behavior as the processing time changes again and again based on `WallClockTimeStampExtractor`. 
 
 ### Configuration

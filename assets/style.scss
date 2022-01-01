@@ -157,6 +157,10 @@ table tr td :last-child {
   color: #222;
 }
 
+.references {
+  overflow-wrap: break-word;
+}
+
 //-----blockquote-----
 .component{
   font-family: "Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
@@ -463,13 +467,13 @@ footer {
 }
 
 body:after {
-    background: linear-gradient(to right, #ffffff   0, #2196F3   33%, #E91E63   66%, #000 100%);
-    width: 100%;
-    height: 5px;
-    top: 0;
-    position: absolute;
-    left: 0;
-    content: '';
+    background: linear-gradient(to right, #ffffff   0, #2196F3   33%, #E91E63   66%, #000 100%);
+    width: 100%;
+    height: 5px;
+    top: 0;
+    position: absolute;
+    left: 0;
+    content: '';
 }
 
 #bar {

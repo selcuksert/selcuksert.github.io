@@ -219,6 +219,100 @@ Schema Registry works as an external compute node separate from Kafka brokers. I
 
 It is also possible to use embedded schema included in events which can be used by clients to define and validate event models. This method is easy to use, brings no additional management and point of failure burdens. However, the event payload size is bigger as additional schema data is included in event payload. When Using Schema Registry the event payload is smaller as schema is stored on Schema Registry. Schema versioning and validation also available on Schema Registry. Schema Registry client libraries have the ability to cache schemas on application that minimize lookup of schemas from remote registry instance. The Achilles heel of Schema Registry is that as a external dependency it stands as a single point of failure. Schema Registry supports working in cluster mode that can be used as a mitigation.
 
+# REST Proxy
+REST Proxy is a utility developed by Confluent that enables integration with Kafka brokers using HTTP/REST without need of native Kafka protocol or client implementations. It is possible to produce and consume events, monitor Kafka cluster and execute administrative commands using REST Proxy. Some use cases that fits REST Proxy usage are:
+- Directly streaming data to;
+    - A client app (web, mobile) that can call REST APIs
+    - An app that is not implemented with supported languages (C, Java, .NET, Go, Python) for Kafka clients
+- Using streaming data in a data engineering platform that does not have support of Kafka but REST
+- Quickly performing administrative actions in an environment that does not have terminal application
+- Ability to authenticate requests and utilize multi-tenant security features of Kafka
+
+Following is an example to get cluster info using REST Proxy:
+```shell
+curl --location --request GET 'http://web.poc.local:8082/v3/clusters/'
+```
+```json
+{
+    "kind": "KafkaClusterList",
+    "metadata": {
+        "self": "http://web.poc.local:8082/v3/clusters",
+        "next": null
+    },
+    "data": [
+        {
+            "kind": "KafkaCluster",
+            "metadata": {
+                "self": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw",
+                "resource_name": "crn:///kafka=ntcqkZ0dR2SmRmMV7Ayjgw"
+            },
+            "cluster_id": "ntcqkZ0dR2SmRmMV7Ayjgw",
+            "controller": {
+                "related": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/brokers/2"
+            },
+            "acls": {
+                "related": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/acls"
+            },
+            "brokers": {
+                "related": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/brokers"
+            },
+            "broker_configs": {
+                "related": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/broker-configs"
+            },
+            "consumer_groups": {
+                "related": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/consumer-groups"
+            },
+            "topics": {
+                "related": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/topics"
+            },
+            "partition_reassignments": {
+                "related": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/topics/-/partitions/-/reassignment"
+            }
+        }
+    ]
+}
+```
+
+Following is an example to get topic info using REST Proxy:
+```shell
+curl --location --request GET 'http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/topics'
+```
+```json
+{
+    "kind": "KafkaTopicList",
+    "metadata": {
+        "self": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/topics",
+        "next": null
+    },
+    "data": [
+        {
+            "kind": "KafkaTopic",
+            "metadata": {
+                "self": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/topics/tasks",
+                "resource_name": "crn:///kafka=ntcqkZ0dR2SmRmMV7Ayjgw/topic=tasks"
+            },
+            "cluster_id": "ntcqkZ0dR2SmRmMV7Ayjgw",
+            "topic_name": "tasks",
+            "is_internal": false,
+            "replication_factor": 3,
+            "partitions": {
+                "related": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/topics/tasks/partitions"
+            },
+            "configs": {
+                "related": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/topics/tasks/configs"
+            },
+            "partition_reassignments": {
+                "related": "http://web.poc.local:8082/v3/clusters/ntcqkZ0dR2SmRmMV7Ayjgw/topics/tasks/partitions/-/reassignment"
+            }
+        },
+        …
+    ]
+}
+```
+
+Following is an example to fire an event using NodeJS:
+{% include image.html url="/images/apache-kafka/rest_proxy_nodejs.png" caption="Firing an event via NodeJS" %}
+
 # What is next?
 This is the first part of Apache Kafka article series. The [next one](/kafka-streams/) is about cutting-edge Kafka Streams technology that enables to implement Microservices Architecture (MSA) compliant stream processing/event streaming applications using Apache Kafka as a data backbone with all of the scalability and availability features of Kafka cluster. 
 

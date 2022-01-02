@@ -1,0 +1,10 @@
+{% raw %}
+<span class="read_time" title="Minute(s) to read: ">
+  {% assign words = content | number_of_words %}
+  {% if words < 360 %}
+    1 min
+  {% else %}
+    {{ words | divided_by:180 }} mins
+  {% endif %}
+</span>
+{% endraw %}

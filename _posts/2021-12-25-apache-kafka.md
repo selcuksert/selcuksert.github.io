@@ -35,7 +35,7 @@ The variety of event sources (sensors on a plane, IoT devices on lorry fleet, cl
 Generally speaking, these types of systems implements no control on the pace of incoming requests and data streams (e.g. ingress buffer for events). There is no focus on the context and content of data and what is being communicated. The last and may be the most prominent drawback is that the communication between client and server is not replayable. IOW, it is difficult to reconstruct or rollback the state in case of any need.
 
 # Apache Kafka
-> You do not need to leave your room. Remain sitting at your table and listen. Do not even listen, simply wait, be quiet, still and solitary. The world will freely offer itself to you to be unmasked.<br/>―  _Franz Kafka_, The Zürau Aphorisms
+{% include pullquote.html quote="You do not need to leave your room. Remain sitting at your table and listen. Do not even listen, simply wait, be quiet, still and solitary. The world will freely offer itself to you to be unmasked." cite="Franz Kafka, The Zürau Aphorisms" %}
 
 As one of the prominent writers of 20<sup>th</sup> century, Franz Kafka underlined the importance of listening to understand things happening around with aforementioned quote of him. Although Jay Kreps, co-creator of Apache Kafka, stated[^3] that to name a technology optimized for writing he used the name of a writer whom he likes, the above quote also overlaps with Apache Kafka's function of listening and processing events around.
 

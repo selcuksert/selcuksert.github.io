@@ -91,7 +91,7 @@ As Kafka works in distributed fashion there needs to be a metadata manager (like
 
 ![KIP-500](https://cwiki.apache.org/confluence/download/attachments/123898922/a.png?version=1&modificationDate=1564694752000&api=v2)
 
-As the time of writing, the implementation **is not** production ready yet and ZooKeeper is **still** the main dependency to shape a Kafka cluster in production grade systems. 
+At the time of writing, the implementation **is not** production ready yet and ZooKeeper is **still** the main dependency to shape a Kafka cluster in production grade systems. 
 
 ## Data Management
 Kafka works on dumb broker-smart subscriber mode, which is why it does not care about the state of the consumer and just keeps data as an binary audit trail in distributed log files. Consumers need to know, store, build their state in case of any need. Consumers only communicate with partition leaders elected by Kafka for each topic.  

@@ -1,1 +1,1 @@
-mediumZoom('[data-zoomable]')
+mediumZoom('.image img')
